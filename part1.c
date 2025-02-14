@@ -24,6 +24,8 @@ int nbStart = 0;
 string finishTokens[20];
 int nbFinish = 0;
 
+
+
 /*
  * Fonction splitligne :
  *   - Recherche le caractère ':' dans la ligne et découpe la partie qui suit en tokens,
@@ -165,36 +167,26 @@ int main(void) {
 
     fclose(fichier);
 
-    // Affichage des règles lues pour vérification.
-    for (int i = 0; i < nbRegles; i++) {
-        printf("Règle %d:\n", i + 1);
-        printf("  Action: %s\n", regles[i].action);
+    //---------------------------------------------------------------
+    
+    // Contient les faits initiaux
+    string actuel[20][20];
+    int j=0;
+    
+    for (int i=0; i<nbStart; i++) {
+    	strcpy(actuel[i][0], startTokens[i]);
 
-        printf("  Preconditions: ");
-        for (int j = 0; j < regles[i].nbPreconds; j++) {
-            printf("%s", regles[i].preconds[j]);
-            if (j < regles[i].nbPreconds - 1)
-                printf(", ");
-        }
-        printf("\n");
-
-        printf("  Add: ");
-        for (int j = 0; j < regles[i].nbAdd; j++) {
-            printf("%s", regles[i].add[j]);
-            if (j < regles[i].nbAdd - 1)
-                printf(", ");
-        }
-        printf("\n");
-
-        printf("  Delete: ");
-        for (int j = 0; j < regles[i].nbDelete; j++) {
-            printf("%s", regles[i].delete[j]);
-            if (j < regles[i].nbDelete - 1)
-                printf(", ");
-        }
-        printf("\n\n");
-        
     }
+    
+    for (int i=0; i<sizeof(actuel[0]); i++){
+    	printf("%s", actuel[0][i]);
+    }
+    
+    
+    // On cherche une précondition qui correspond à nos faits et on joue avec le add et le delete en conséquence.
+    // On crée une boucle qui agit tant que actuel != finish
+    
+    
 
     return 0;
 }
