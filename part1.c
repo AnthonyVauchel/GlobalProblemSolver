@@ -165,7 +165,36 @@ int main(void) {
 
     fclose(fichier);
 
-    
+    // Affichage des règles lues pour vérification.
+    for (int i = 0; i < nbRegles; i++) {
+        printf("Règle %d:\n", i + 1);
+        printf("  Action: %s\n", regles[i].action);
+
+        printf("  Preconditions: ");
+        for (int j = 0; j < regles[i].nbPreconds; j++) {
+            printf("%s", regles[i].preconds[j]);
+            if (j < regles[i].nbPreconds - 1)
+                printf(", ");
+        }
+        printf("\n");
+
+        printf("  Add: ");
+        for (int j = 0; j < regles[i].nbAdd; j++) {
+            printf("%s", regles[i].add[j]);
+            if (j < regles[i].nbAdd - 1)
+                printf(", ");
+        }
+        printf("\n");
+
+        printf("  Delete: ");
+        for (int j = 0; j < regles[i].nbDelete; j++) {
+            printf("%s", regles[i].delete[j]);
+            if (j < regles[i].nbDelete - 1)
+                printf(", ");
+        }
+        printf("\n\n");
+        
+    }
 
     return 0;
 }
