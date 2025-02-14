@@ -166,27 +166,5 @@ int main(void) {
     }
 
     fclose(fichier);
-
-    //---------------------------------------------------------------
-    
-    // Contient les faits initiaux
-    string actuel[20][20];
-    int j=0;
-    
-    for (int i=0; i<nbStart; i++) {
-    	strcpy(actuel[i][0], startTokens[i]);
-
-    }
-    
-    for (int i=0; i<sizeof(actuel[0]); i++){
-    	printf("%s", actuel[0][i]);
-    }
-    
-    
-    // On cherche une précondition qui correspond à nos faits et on joue avec le add et le delete en conséquence.
-    // On crée une boucle qui agit tant que actuel != finish
-    
-    
-
     return 0;
 }
