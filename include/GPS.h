@@ -63,10 +63,10 @@ extern State finishState;
 extern Rule rules[MAX_RULES];
 extern int ruleCount;
 
-extern bool solutionFound;      //Indique qu'une solution a été trouvée
+extern bool solutionFound; //Indique qu'une solution a été trouvée
 extern char solutionActions[MAX_DEPTH][MAX_ACTION_LENGTH];
 extern State solutionPath[MAX_DEPTH+1]; //solutionPath[i] correspond à l'état après i actions
-extern int solutionLength;          //Nombre d'actions dans la solution
+extern int solutionLength; //Nombre d'actions dans la solution
 
 
 //------------------------
@@ -75,8 +75,13 @@ extern int solutionLength;          //Nombre d'actions dans la solution
 void sep();
 void printState(State* s);
 void printSolution();
-void trimNewline(char* s);
-int parseLine(char source[], string cible[]);
+void trim(char* s);
+void parseError(int lineNo, const char* msg);
+bool verifLine(FILE *file, char *buffer, int *lineNo);
+int parseLine(const char *line, const char* key, string cible[], int maxTokens, int lineNo);
+bool parseState(const char *line, const char *key, State *s, int lineNo);
+bool parseAction(FILE *file, char *line, int *lineNo);
+bool loadProblem(const char *path);
 void solve(State current, State path[], int depth, int startRule);
 bool stateInPath(State path[], int depth, State* s);
 bool containsFact(State* s, const char* fact);

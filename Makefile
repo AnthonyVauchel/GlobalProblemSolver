@@ -1,18 +1,19 @@
+CFLAGS = -Wall -Wextra -std=c11 -g -Iinclude
 CC = gcc 
 NAME = gps
-SRC = main.c parser.c solver.c state.c display.c
+SRC = src/main.c src/parser.c src/solver.c src/state.c src/display.c
 OBJ = $(SRC:.c=.o)
 GEN = generateur
  
 all: $(NAME) $(GEN)
  
 $(NAME): $(OBJ)
-	$(CC) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^
  
-$(GEN): generateur.c
-	$(CC) -o $@ $<
+$(GEN): tools/generateur.c
+	$(CC) $(CFLAGS) -o $@ $<
  
-%.o: %.c GPS.h
+%.o: %.c include/GPS.h
 	$(CC) $(CFLAGS) -c $< -o $@
  
 clean:
@@ -20,3 +21,5 @@ clean:
  
 fclean: clean
 	rm -f $(NAME) $(GEN)
+
+re: fclean all
