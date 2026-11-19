@@ -82,7 +82,7 @@ int parseLine(const char *line, const char* key, string cible[], int maxTokens, 
 bool parseState(const char *line, const char *key, State *s, int lineNo);
 bool parseAction(FILE *file, char *line, int *lineNo);
 bool loadProblem(const char *path);
-void solve(State path[], int depth);
+void solve(State path[], int depth, bool isQuiet);
 bool stateInPath(State path[], int depth, State* s);
 bool containsFact(State* s, const char* fact);
 void addFact(State* s, const char* fact);

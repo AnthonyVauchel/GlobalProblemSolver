@@ -1,19 +1,23 @@
 #include "GPS.h"
 
 int main(int argc, char *argv[]){
-
-    if (argc != 2){
-        printf(RED "Usage : ./gps <path>\n");
-        return 1;
-    }
-
+    bool quiet = false;
     char filePath[256];
     char chronoChoice[10];
     bool measureTime = false;
     clock_t startTime, endTime;
     double elapsedTime = 0.0;
+
+    if (argc == 2){
+        strcpy(filePath, argv[1]);
+    } else if (argc == 3 && strcmp(argv[1], "-q") == 0 ){
+        quiet = true;
+        strcpy(filePath, argv[2]);
+    } else {
+        printf(RED "Usage : ./gps <option> <path>\n" RESET);
+        return 1;
+    }
     
-    strcpy(filePath, argv[1]);
     trim(filePath);
     
     //Lecture et parsing du fichier
@@ -31,13 +35,15 @@ int main(int argc, char *argv[]){
     }
     
     //Affichage du problème chargé (états de départ et d'arrivée)
-    sep();
-    printf(BOLD "Start: " RESET);
-    printState(&startState);
-    printf(BOLD "Finish: " RESET);
-    printState(&finishState);
-    printf(BOLD "Règles chargées : " RESET "%d\n", ruleCount);
-    sep();
+    if (!quiet){
+        sep();
+        printf(BOLD "Start: " RESET);
+        printState(&startState);
+        printf(BOLD "Finish: " RESET);
+        printState(&finishState);
+        printf(BOLD "Règles chargées : " RESET "%d\n", ruleCount);
+        sep();
+    }
     
     //Démarrage du chronométrage si demandé
     if (measureTime){
@@ -49,7 +55,7 @@ int main(int argc, char *argv[]){
     path[0] = startState;
     
     //Lancement du backtracking en partant de la règle 0
-    solve(path, 0);
+    solve(path, 0, quiet);
     
     //Arrêt du chronométrage si demandé
     if (measureTime){
