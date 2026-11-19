@@ -2,19 +2,29 @@
 
 int main(int argc, char *argv[]){
     bool quiet = false;
-    char filePath[256];
-    char chronoChoice[10];
     bool measureTime = false;
-    clock_t startTime, endTime;
+    char *filePath = NULL;
+    clock_t startTime = 0, endTime = 0;
     double elapsedTime = 0.0;
+    
+    for (int i = 1; i < argc; i++){
+        if (strcmp(argv[i], "-q") == 0){
+            quiet = true;
+        } else if (strcmp(argv[i], "-t") == 0){
+            measureTime = true;
+        } else if (argv[i][0] == '-'){
+            printf(RED "Options possibles :\n -q : utilisation silencieuse\n -t : mesurer le temps d'exécution\n" RESET);
+            return 1;
+        } else if (filePath == NULL){
+            filePath = argv[i];
+        } else {
+            printf(RED "Usage : ./gps <options> <path>\n" RESET);
+            return 1;
+        }
+    }
 
-    if (argc == 2){
-        strcpy(filePath, argv[1]);
-    } else if (argc == 3 && strcmp(argv[1], "-q") == 0 ){
-        quiet = true;
-        strcpy(filePath, argv[2]);
-    } else {
-        printf(RED "Usage : ./gps <option> <path>\n" RESET);
+    if (filePath == NULL){
+        printf(RED "Usage : ./gps <options> <path>\n" RESET);
         return 1;
     }
     
@@ -24,14 +34,6 @@ int main(int argc, char *argv[]){
     if (!loadProblem(filePath)){
         printf("Erreur : impossible de charger le problème\n");
         return 1;
-    }
-    
-    //Demande si l'utilisateur souhaite chronométrer la résolution
-    printf(BOLD "Souhaitez-vous chronométrer le temps de résolution ? (O/N) : " RESET);
-    if (fgets(chronoChoice, sizeof(chronoChoice), stdin)){
-        if (chronoChoice[0] == 'O' || chronoChoice[0] == 'o'){
-            measureTime = true;
-        }
     }
     
     //Affichage du problème chargé (états de départ et d'arrivée)
