@@ -1,6 +1,11 @@
 #include "GPS.h"
 
-int main(){
+int main(int argc, char *argv[]){
+
+    if (argc != 2){
+        printf(RED "Usage : ./gps <path>\n");
+        return 1;
+    }
 
     char filePath[256];
     char chronoChoice[10];
@@ -8,12 +13,7 @@ int main(){
     clock_t startTime, endTime;
     double elapsedTime = 0.0;
     
-    //Demande du chemin vers le fichier du problème
-    printf(BOLD "Veuillez entrer le chemin vers le fichier du problème : " RESET);
-    if (!fgets(filePath, sizeof(filePath), stdin)){
-        printf(RED "Erreur lors de la lecture du chemin.\n" RESET);
-        return 1;
-    }
+    strcpy(filePath, argv[1]);
     trim(filePath);
     
     //Lecture et parsing du fichier
