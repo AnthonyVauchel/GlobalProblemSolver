@@ -49,7 +49,7 @@ int main(){
     path[0] = startState;
     
     //Lancement du backtracking en partant de la règle 0
-    solve(startState, path, 0, 0);
+    solve(path, 0);
     
     //Arrêt du chronométrage si demandé
     if (measureTime){

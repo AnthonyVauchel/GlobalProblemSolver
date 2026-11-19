@@ -177,7 +177,7 @@ bool loadProblem(const char* path){
 
     FILE *file = fopen(path, "r");
     if (!file){
-        printf("Erreur : impossible d'ouvrir le fichier");
+        printf("Erreur : impossible d'ouvrir le fichier\n");
         return false;
     }
 

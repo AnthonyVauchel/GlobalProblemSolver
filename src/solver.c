@@ -5,7 +5,7 @@ char solutionActions[MAX_DEPTH][MAX_ACTION_LENGTH];
 State solutionPath[MAX_DEPTH + 1];
 int solutionLength = 0;
 
-void solve(State current, State path[], int depth, int startRule){
+void solve(State path[], int depth){
     /*Fonction récursive qui explore l'espace des états en appliquant les règles pour atteindre le but en utilisant un mécanisme de backtracking
 
     Fonctionnement :
@@ -22,10 +22,11 @@ void solve(State current, State path[], int depth, int startRule){
     */
 
     if (solutionFound) return;
-    if (depth > MAX_DEPTH) return;
+    
+    State *current = &path[depth];
     
     //Si l'état courant satisfait le but, mémoriser le chemin de solution
-    if (goalReached(&current, &finishState)){
+    if (goalReached(current, &finishState)){
         solutionFound = true;
         for (int i = 0; i <= depth; i++){
             solutionPath[i] = path[i];
@@ -34,33 +35,31 @@ void solve(State current, State path[], int depth, int startRule){
         return;
     }
     
-    bool appliedAnyRule = false;
+    if (depth >= MAX_DEPTH) return;
+
+    State *next = &path[depth+1];
     
     //Parcourir les règles applicables à partir de l'indice startRule
-    for (int i = startRule; i < ruleCount; i++){
-        if (ruleApplicable(&current, &rules[i])){
-            appliedAnyRule = true;
+    for (int i = 0; i < ruleCount; i++){
+        if (ruleApplicable(current, &rules[i])){
             
-            State next;
-            applyRule(&current, &rules[i], &next);
+            applyRule(current, &rules[i], next);
             
             //Si l'application de la règle ne modifie pas l'état, on passe à la suivante
-            if (stateEquals(&current, &next)){
+            if (stateEquals(current, next)){
                 printf(RED "\nAction \"%s\" ne modifie pas l'état. On la saute.\n" RESET, rules[i].action);
                 continue;
             }
             
             //Si le nouvel état n'est pas déjà dans le chemin (pour éviter les cycles)
-            if (!stateInPath(path, depth + 1, &next)){
+            if (!stateInPath(path, depth + 1, next)){
                 strcpy(solutionActions[depth], rules[i].action);
                 printf(GREEN "\nOn réalise : %s\n" RESET, rules[i].action);
                 printf(BLUE "Les états actuels sont maintenant : " RESET);
-                printState(&next);
+                printState(next);
                 
-                path[depth + 1] = next;
                 //Pour le nouvel état, réinitialiser l'indice des règles (startRule = 0)
-                solve(next, path, depth + 1, 0);
-                
+                solve(path, depth + 1);
                 if (solutionFound) return;
                 
                 printf(RED "\nOn revient en arrière après avoir tenté : %s\n" RESET, rules[i].action);
@@ -69,9 +68,7 @@ void solve(State current, State path[], int depth, int startRule){
     }
     
     //Si aucune règle applicable n'a été trouvée, indiquer le retour en arrière
-    if (!appliedAnyRule){
-        printf(RED "Aucune règle applicable, on revient en arrière.\n" RESET);
-    }
+    printf(RED "Aucune règle applicable, on revient en arrière.\n" RESET);
 }
 
 bool stateInPath(State path[], int depth, State* s){
